@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>logo sanders bakery</title>
+</head>
+<body>
+
+<div>
+    <!-- Tabs -->
+    <ul class="tabs">
+        <li class="tab" onclick="changeTab(1)">Customers</li>
+        <li class="tab" onclick="changeTab(2)">Items</li>
+        <li class="tab" onclick="changeTab(3)">Orders</li>
+    </ul>
+
+    <!-- Tab Content for Customers -->
+    <div id="tab1" class="tab-content active">
+        <h2>Customers</h2>
+
+        <!-- Search and Add Customer Section -->
+        <div class="search-add-section">
+            <div class="search-section">
+                <input type="text" id="customerSearchInput" placeholder="Search by name, address, or code">
+                <button id="searchButton" onclick="searchCustomers()">Search</button>
+            </div>
+            <div class="add-customer-section">
+                <button onclick="openAddCustomerPopup()" class="add-customer-button">Add Customer</button>
+            </div>
+        </div>
+
+        <!-- Customer List Section -->
+        <div class="customer-list">
+            <div class="customer-header">
+                <div class="customer-column" onclick="sortCustomers('name')">Name</div>
+                <div class="customer-column" onclick="sortCustomers('address')">Address</div>
+                <div class="customer-column" onclick="sortCustomers('code')">Code</div>
+            </div>
+            <!-- Display customer information here -->
+            <div class="customer-item">
+                <div class="customer-column">Ashel up</div>
+                <div class="customer-column">20 Ashel Monsey NY 10952</div>
+                <div class="customer-column">Code Monsey</div>
+            </div>
+            <div class="customer-item">
+                <div class="customer-column">Ateres chaya</div>
+                <div class="customer-column">1477 34th St. Brooklyn NY 11211</div>
+                <div class="customer-column">Code bp</div>
+            </div>
+            <!-- Add more customer items as needed -->
+        </div>
+    </div>
+
+    <!-- Tab Content for Items -->
+    <div id="tab2" class="tab-content">
+        <h2>Items</h2>
+        <p>This is the content of Items.</p>
+    </div>
+
+    <!-- Tab Content for Orders -->
+    <div id="tab3" class="tab-content">
+        <h2>Orders</h2>
+        <p>This is the content of Orders.</p>
+    </div>
+</div>
+
+<!-- Add Customer Popup -->
+<div id="addCustomerPopup" class="popup">
+    <div class="popup-content">
+        <span class="close" onclick="closeAddCustomerPopup()">&times;</span>
+        <h2>Add Customer</h2>
+        <form id="addCustomerForm">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <input type="text" id="address" name="address" required>
+            </div>
+
+            <div class="form-group">
+                <label for="code">Code:</label>
+                <input type="text" id="code" name="code" required>
+            </div>
+
+            <button type="button" onclick="submitAddCustomerForm()">Add Customer</button>
+        </form>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
