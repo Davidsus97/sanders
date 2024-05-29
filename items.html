@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Books</title>
+  <title>items</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -22,13 +22,44 @@
 
   <section id="items">
      <div>
-        <h2>Items</h2>
-        <p>This is the content of Items.</p>
+        <h2>Items</h2>    
+        <!-- Search Bar and Button -->
+      <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search for items...">
+        <button id="searchButton">Search</button>
+      </div>
+
+         <table id="itemsTable">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Price</th>
+              <th>Weight</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Book A</td>
+              <td>$10</td>
+              <td>1.5 lbs</td>
+            </tr>
+            <tr>
+              <td>Book B</td>
+              <td>$15</td>
+              <td>2 lbs</td>
+            </tr>
+            <tr>
+              <td>Book C</td>
+              <td>$20</td>
+              <td>1.8 lbs</td>
+            </tr>
+          </tbody>
+        </table>
      </div>
   </section>
 
  <footer>
-    <p>&copy; 2024 Books. All rights reserved.</p>
+    <p>&copy; 2024 All rights reserved.</p>
   </footer>
 
   <script src="script.js"></script>
