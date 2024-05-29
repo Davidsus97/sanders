@@ -1,18 +1,4 @@
-// Function to change tabs
-function changeTab(tabIndex) {
-  const tabs = document.querySelectorAll(".tab");
-  const tabContents = document.querySelectorAll(".tab-content");
 
-  tabs.forEach((tab, index) => {
-    if (index + 1 === tabIndex) {
-      tab.classList.add("active");
-      tabContents[index].classList.add("active");
-    } else {
-      tab.classList.remove("active");
-      tabContents[index].classList.remove("active");
-    }
-  });
-}
 //openAddCustomerPopup
 // Function to open the Add Customer popup
 function openAddCustomerPopup() {

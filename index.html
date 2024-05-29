@@ -4,20 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
+    
     <title>logo sanders bakery</title>
 </head>
 <body>
 
-<div>
-    <!-- Tabs -->
-    <ul class="tabs">
-        <li class="tab" onclick="changeTab(1)">Customers</li>
-        <li class="tab" onclick="changeTab(2)">Items</li>
-        <li class="tab" onclick="changeTab(3)">Orders</li>
-    </ul>
+<header>
+    <h1>Customer</h1>
+  </header>
 
+    <nav class="tabs">
+    <a href="#index" class="tab">Customer</a>
+    <a href="items.html" class="tab">Items</a>
+    <a href="orders.html" class="tab">Orders</a>
+  </nav>
+
+<section id="index">
+ 
+<div>
     <!-- Tab Content for Customers -->
-    <div id="tab1" class="tab-content active">
+    <div class="tab-content active">
         <h2>Customers</h2>
 
         <!-- Search and Add Customer Section -->
@@ -53,18 +59,12 @@
         </div>
     </div>
 
-    <!-- Tab Content for Items -->
-    <div id="tab2" class="tab-content">
-        <h2>Items</h2>
-        <p>This is the content of Items.</p>
-    </div>
 
-    <!-- Tab Content for Orders -->
-    <div id="tab3" class="tab-content">
-        <h2>Orders</h2>
-        <p>This is the content of Orders.</p>
-    </div>
+    
 </div>
+
+
+ </section>
 
 <!-- Add Customer Popup -->
 <div id="addCustomerPopup" class="popup">
@@ -91,6 +91,10 @@
         </form>
     </div>
 </div>
+
+<footer>
+    <p>&copy; 2024 Books. All rights reserved.</p>
+  </footer>
 
 <script src="script.js"></script>
 </body>
