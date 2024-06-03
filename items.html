@@ -1,35 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>items</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>items</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
+  <body>
+    <header>
+      <h1>Items</h1>
+    </header>
 
-<body>
+    <nav class="tabs">
+      <a href="index.html" class="tab">Customer</a>
+      <a href="#items" class="tab">Items</a>
+      <a href="orders.html" class="tab">Orders</a>
+    </nav>
 
-  <header>
-    <h1>Items</h1>
-  </header>
-
-  <nav class="tabs">
-    <a href="index.html" class="tab" >Customer</a>
-    <a href="#items" class="tab" >Items</a>
-    <a href="orders.html" class="tab">Orders</a>
-  </nav>
-
-  <section id="items">
-     <div>
-        <h2>Items</h2>    
+    <section id="items">
+      <div class="tab-content active">
+        <h2>Items</h2>
         <!-- Search Bar and Button -->
-      <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Search for items...">
-        <button id="searchButton">Search</button>
-      </div>
+        <div class="search-add-section">
+          <div class="search-section">
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Search for items..."
+            />
+            <button id="searchButton">Search</button>
+          </div>
 
-         <table id="itemsTable">
+          <div class="add-customer-section">
+            <button class="add-customer-button">
+              <a href="additems.html" class="add-customer-button">Add Item</a>
+            </button>
+          </div>
+        </div>
+
+        <table id="itemsTable">
           <thead>
             <tr>
               <th>Item</th>
@@ -37,31 +47,125 @@
               <th>Weight</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>Book A</td>
-              <td>$10</td>
-              <td>1.5 lbs</td>
-            </tr>
-            <tr>
-              <td>Book B</td>
-              <td>$15</td>
-              <td>2 lbs</td>
-            </tr>
-            <tr>
-              <td>Book C</td>
-              <td>$20</td>
-              <td>1.8 lbs</td>
-            </tr>
-          </tbody>
+          <tbody id="tbody1"></tbody>
         </table>
-     </div>
-  </section>
+      </div>
+    </section>
 
- <footer>
-    <p>&copy; 2024 All rights reserved.</p>
-  </footer>
+    <footer>
+      <p>&copy; 2024 All rights reserved.</p>
+    </footer>
 
-  <script src="script.js"></script>
-</body>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+      import {
+        getDatabase,
+        ref,
+        child,
+        get,
+        set,
+        onValue,
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyA0ngZCZavOM77Z6O2PaSFl3FztHGcjobk",
+        authDomain: "sanders-178b9.firebaseapp.com",
+        databaseURL: "https://sanders-178b9-default-rtdb.firebaseio.com",
+        projectId: "sanders-178b9",
+        storageBucket: "sanders-178b9.appspot.com",
+        messagingSenderId: "225334600973",
+        appId: "1:225334600973:web:39d2f699dd719eecadbc44",
+        measurementId: "G-GMMS2WFE3V",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const db = getDatabase();
+
+      let tbody = document.getElementById("tbody1");
+
+      function AddItemToTable(item, price, weight) {
+        let trow = document.createElement("tr");
+        let td1 = document.createElement("td");
+        let td2 = document.createElement("td");
+        let td3 = document.createElement("td");
+
+        td1.innerHTML = item;
+        td2.innerHTML = price;
+        td3.innerHTML = weight;
+
+        trow.appendChild(td1);
+        trow.appendChild(td2);
+        trow.appendChild(td3);
+
+        tbody.appendChild(trow);
+      }
+
+      function AddAllItemsToTable(TheItems) {
+        tbody.innerHTML = "";
+        TheItems.forEach((element) => {
+          AddItemToTable(element.item, element.price, element.weight);
+        });
+      }
+
+      function GetAllDataOnce() {
+        const dbRef = ref(db);
+        get(child(dbRef, "items"))
+          .then((snapshot) => {
+            var Items = [];
+            snapshot.forEach((childSnapshot) => {
+              Items.push(childSnapshot.val());
+            });
+            AddAllItemsToTable(Items);
+          })
+          .catch((error) => {
+            console.error("Error fetching data: ", error);
+          });
+      }
+
+      function GetAllDataRealtime() {
+        const dbRef = ref(db, "items");
+        onValue(dbRef, (snapshot) => {
+          var Items = [];
+          snapshot.forEach((childSnapshot) => {
+            Items.push(childSnapshot.val());
+          });
+          AddAllItemsToTable(Items);
+        });
+      }
+
+      window.onload = GetAllDataOnce;
+
+      document.addEventListener("DOMContentLoaded", (event) => {
+        const searchInput = document.getElementById("searchInput");
+        const searchButton = document.getElementById("searchButton");
+        const table = document.getElementById("itemsTable");
+        const rows = table.getElementsByTagName("tr");
+
+        searchButton.addEventListener("click", () => {
+          const filter = searchInput.value.toLowerCase();
+          for (let i = 1; i < rows.length; i++) {
+            let row = rows[i];
+            let item = row.getElementsByTagName("td")[0];
+            let price = row.getElementsByTagName("td")[1];
+            let weight = row.getElementsByTagName("td")[2];
+
+            if (item && price && weight) {
+              let itemText = item.textContent || item.innerText;
+              let priceText = price.textContent || price.innerText;
+              let weightText = weight.textContent || weight.innerText;
+
+              row.style.display =
+                itemText.toLowerCase().includes(filter) ||
+                priceText.toLowerCase().includes(filter) ||
+                weightText.toLowerCase().includes(filter)
+                  ? ""
+                  : "none";
+            }
+          }
+        });
+      });
+    </script>
+  </body>
 </html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Item</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Add Item</h1>
+    </header>
+    <nav class="tabs">
+      <a href="index.html" class="tab">Customer</a>
+      <a href="items.html" class="tab">Items</a>
+      <a href="orders.html" class="tab">Orders</a>
+    </nav>
+    <section id="additem">
+      <div class="tab-content active">
+        <h2>Add Item</h2>
+        <label for="ItemInp">Item</label>
+        <input
+          type="text"
+          name="item"
+          id="ItemInp"
+          placeholder="Item"
+          required
+        />
+        <br /><br />
+        <label for="PriceInp">Price</label>
+        <input
+          type="number"
+          name="price"
+          id="PriceInp"
+          placeholder="Price"
+          required
+        />
+        <br /><br />
+        <label for="WeightInp">Weight</label>
+        <input
+          type="number"
+          name="weight"
+          id="WeightInp"
+          placeholder="Weight"
+          required
+        />
+        <br /><br />
+        <button class="add-customer-button" id="additembtn">Add Item</button>
+      </div>
+    </section>
+    <footer>
+      <p>&copy; 2024 All rights reserved.</p>
+    </footer>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+      import {
+        getDatabase,
+        ref,
+        set,
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyA0ngZCZavOM77Z6O2PaSFl3FztHGcjobk",
+        authDomain: "sanders-178b9.firebaseapp.com",
+        databaseURL: "https://sanders-178b9-default-rtdb.firebaseio.com",
+        projectId: "sanders-178b9",
+        storageBucket: "sanders-178b9.appspot.com",
+        messagingSenderId: "225334600973",
+        appId: "1:225334600973:web:39d2f699dd719eecadbc44",
+        measurementId: "G-GMMS2WFE3V",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const db = getDatabase();
+
+      let ItemInp = document.getElementById("ItemInp");
+      let PriceInp = document.getElementById("PriceInp");
+      let WeightInp = document.getElementById("WeightInp");
+      let additembtn = document.getElementById("additembtn");
+
+      function AddData() {
+        set(ref(db, "items/" + ItemInp.value), {
+          item: ItemInp.value, // Changed to match retrieval key
+          price: PriceInp.value, // Changed to match retrieval key
+          weight: WeightInp.value, // Changed to match retrieval key
+        })
+          .then(() => {
+            alert("Data Added Successfully");
+          })
+          .catch((error) => {
+            alert("Unsuccessful");
+            console.log(error);
+          });
+      }
+
+      additembtn.addEventListener("click", AddData);
+    </script>
+  </body>
+</html>

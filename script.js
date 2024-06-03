@@ -1,33 +1,3 @@
-document.addEventListener("DOMContentLoaded", (event) => {
-  const searchInput = document.getElementById("searchInput");
-  const searchButton = document.getElementById("searchButton");
-  const table = document.getElementById("itemsTable");
-  const rows = table.getElementsByTagName("tr");
-
-  searchButton.addEventListener("click", () => {
-    const filter = searchInput.value.toLowerCase();
-    for (let i = 1; i < rows.length; i++) {
-      let row = rows[i];
-      let item = row.getElementsByTagName("td")[0];
-      let price = row.getElementsByTagName("td")[1];
-      let weight = row.getElementsByTagName("td")[2];
-
-      if (item && price && weight) {
-        let itemText = item.textContent || item.innerText;
-        let priceText = price.textContent || price.innerText;
-        let weightText = weight.textContent || weight.innerText;
-
-        row.style.display =
-          itemText.toLowerCase().includes(filter) ||
-          priceText.toLowerCase().includes(filter) ||
-          weightText.toLowerCase().includes(filter)
-            ? ""
-            : "none";
-      }
-    }
-  });
-});
-
 //openAddCustomerPopup
 // Function to open the Add Customer popup
 function openAddCustomerPopup() {

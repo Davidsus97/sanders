@@ -1,101 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    
-    <title>logo sanders bakery</title>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
 
-<header>
-    <h1>Customer</h1>
-  </header>
+    <title>logo sanders bakery</title>
+  </head>
+  <body>
+    <header>
+      <h1>Customer</h1>
+    </header>
 
     <nav class="tabs">
-    <a href="#index" class="tab">Customer</a>
-    <a href="items.html" class="tab">Items</a>
-    <a href="orders.html" class="tab">Orders</a>
-  </nav>
+      <a href="#index" class="tab">Customer</a>
+      <a href="items.html" class="tab">Items</a>
+      <a href="orders.html" class="tab">Orders</a>
+    </nav>
 
-<section id="index">
- 
-<div>
-    <!-- Tab Content for Customers -->
-    <div class="tab-content active">
-        <h2>Customers</h2>
+    <section id="index">
+      <div>
+        <!-- Tab Content for Customers -->
+        <div class="tab-content active">
+          <h2>Customers</h2>
 
-        <!-- Search and Add Customer Section -->
-        <div class="search-add-section">
+          <!-- Search and Add Customer Section -->
+          <div class="search-add-section">
             <div class="search-section">
-                <input type="text" id="customerSearchInput" placeholder="Search by name, address, or code">
-                <button id="searchButton" onclick="searchCustomers()">Search</button>
+              <input
+                type="text"
+                id="customerSearchInput"
+                placeholder="Search by name, address, or code"
+              />
+              <button id="searchButton" onclick="searchCustomers()">
+                Search
+              </button>
             </div>
-            <div class="add-customer-section">
-                <button onclick="openAddCustomerPopup()" class="add-customer-button">Add Customer</button>
+            <div class="add-customer-button">
+              <button
+                onclick="openAddCustomerPopup()"
+                class="add-customer-button"
+              >
+                Add Customer
+              </button>
             </div>
-        </div>
+          </div>
 
-        <!-- Customer List Section -->
-        <div class="customer-list">
+          <!-- Customer List Section -->
+          <div class="customer-list">
             <div class="customer-header">
-                <div class="customer-column" onclick="sortCustomers('name')">Name</div>
-                <div class="customer-column" onclick="sortCustomers('address')">Address</div>
-                <div class="customer-column" onclick="sortCustomers('code')">Code</div>
+              <div class="customer-column" onclick="sortCustomers('name')">
+                Name
+              </div>
+              <div class="customer-column" onclick="sortCustomers('address')">
+                Address
+              </div>
+              <div class="customer-column" onclick="sortCustomers('code')">
+                Code
+              </div>
             </div>
             <!-- Display customer information here -->
             <div class="customer-item">
-                <div class="customer-column">Ashel up</div>
-                <div class="customer-column">20 Ashel Monsey NY 10952</div>
-                <div class="customer-column">Code Monsey</div>
+              <div class="customer-column">Ashel up</div>
+              <div class="customer-column">20 Ashel Monsey NY 10952</div>
+              <div class="customer-column">Code Monsey</div>
             </div>
             <div class="customer-item">
-                <div class="customer-column">Ateres chaya</div>
-                <div class="customer-column">1477 34th St. Brooklyn NY 11211</div>
-                <div class="customer-column">Code bp</div>
+              <div class="customer-column">Ateres chaya</div>
+              <div class="customer-column">1477 34th St. Brooklyn NY 11211</div>
+              <div class="customer-column">Code bp</div>
             </div>
             <!-- Add more customer items as needed -->
+          </div>
         </div>
-    </div>
+      </div>
+    </section>
 
-
-    
-</div>
-
-
- </section>
-
-<!-- Add Customer Popup -->
-<div id="addCustomerPopup" class="popup">
-    <div class="popup-content">
+    <!-- Add Customer Popup -->
+    <div id="addCustomerPopup" class="popup">
+      <div class="popup-content">
         <span class="close" onclick="closeAddCustomerPopup()">&times;</span>
         <h2>Add Customer</h2>
         <form id="addCustomerForm">
-            <div class="form-group">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
-            </div>
+          <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required />
+          </div>
 
-            <div class="form-group">
-                <label for="address">Address:</label>
-                <input type="text" id="address" name="address" required>
-            </div>
+          <div class="form-group">
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address" required />
+          </div>
 
-            <div class="form-group">
-                <label for="code">Code:</label>
-                <input type="text" id="code" name="code" required>
-            </div>
+          <div class="form-group">
+            <label for="code">Code:</label>
+            <input type="text" id="code" name="code" required />
+          </div>
 
-            <button type="button" onclick="submitAddCustomerForm()">Add Customer</button>
+          <button type="button" onclick="submitAddCustomerForm()">
+            Add Customer
+          </button>
         </form>
+      </div>
     </div>
-</div>
 
-<footer>
-    <p>&copy; 2024 All rights reserved.</p>
-  </footer>
+    <footer>
+      <p>&copy; 2024 All rights reserved.</p>
+    </footer>
 
-<script src="script.js"></script>
-</body>
+    <script src="script.js"></script>
+  </body>
 </html>
