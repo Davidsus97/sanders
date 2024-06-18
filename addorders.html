@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Order</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Add Order</h1>
+    </header>
+    <nav class="tabs">
+      <a href="index.html" class="tab">Customer</a>
+      <a href="items.html" class="tab">Items</a>
+      <a href="orders.html" class="tab">Orders</a>
+    </nav>
+    <section id="addorder">
+      <div class="tab-content active">
+        <h2>Add Order</h2>
+        <label for="DateInp">Item</label>
+        <input
+          type="date"
+          name="date"
+          id="DateInp"
+          placeholder="Date"
+          required
+        />
+        <br /><br />
+        <label for="TimeInp">Time</label>
+        <input
+          type="time"
+          name="time"
+          id="TimeInp"
+          placeholder="Time"
+          required
+        />
+        <br /><br />
+        <label for="CustomerInp">Customer</label>
+        <input
+          type="text"
+          name="customer"
+          id="CustomerInp"
+          placeholder="Customer"
+          required
+        />
+        <br /><br />
+        <label for="QuantityInp">Quantity</label>
+        <input
+          type="number"
+          name="quantity"
+          id="QuantityInp"
+          placeholder="Quantity"
+          required
+        />
+        <br /><br />
+        <label for="ItemInp">Item</label>
+        <input
+          type="text"
+          name="item"
+          id="ItemInp"
+          placeholder="Item"
+          required
+        />
+        <br /><br />
+        <label for="TotalInp">Total</label>
+        <input
+          type="number"
+          name="total"
+          id="TotalInp"
+          placeholder="Total"
+          required
+        />
+        <br /><br />
+        <button class="add-customer-button" id="addorderbtn">Add Order</button>
+      </div>
+    </section>
+    <footer>
+      <p>&copy; 2024 All rights reserved.</p>
+    </footer>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+      import {
+        getDatabase,
+        ref,
+        set,
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyA0ngZCZavOM77Z6O2PaSFl3FztHGcjobk",
+        authDomain: "sanders-178b9.firebaseapp.com",
+        databaseURL: "https://sanders-178b9-default-rtdb.firebaseio.com",
+        projectId: "sanders-178b9",
+        storageBucket: "sanders-178b9.appspot.com",
+        messagingSenderId: "225334600973",
+        appId: "1:225334600973:web:39d2f699dd719eecadbc44",
+        measurementId: "G-GMMS2WFE3V",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const db = getDatabase();
+
+      let DateInp = document.getElementById("DateInp");
+      let TimeInp = document.getElementById("TimeInp");
+      let CustomerInp = document.getElementById("CustomerInp");
+      let QuantityInp = document.getElementById("QuantityInp");
+      let ItemInp = document.getElementById("ItemInp");
+      let TotalInp = document.getElementById("TotalInp");
+      let addorderbtn = document.getElementById("addorderbtn");
+
+      function AddData() {
+        set(ref(db, "orders/" + DateInp.value), {
+          date: DateInp.value, // Changed to match retrieval key
+          time: TimeInp.value, // Changed to match retrieval key
+          customer: CustomerInp.value, // Changed to match retrieval key
+          quantity: QuantityInp.value, // Changed to match retrieval key
+          item: ItemInp.value, // Changed to match retrieval key
+          total: TotalInp.value, // Changed to match retrieval key
+        })
+          .then(() => {
+            alert("Data Added Successfully");
+          })
+          .catch((error) => {
+            alert("Unsuccessful");
+            console.log(error);
+          });
+      }
+
+      addorderbtn.addEventListener("click", AddData);
+    </script>
+  </body>
+</html>

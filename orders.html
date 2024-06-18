@@ -19,9 +19,42 @@
     </nav>
 
     <section id="orders">
-      <div>
+      <div class="tab-content active">
         <h2>Orders</h2>
-        <p>This is the content of Orders.</p>
+
+        <!-- Search Bar and Button -->
+        <div class="search-add-section">
+          <div class="search-section">
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Search for orders..."
+            />
+            <button id="searchButton">Search</button>
+          </div>
+
+          <div class="add-customer-button">
+            <button class="add-customer-button">
+              <a href="addorders.html" class="add-customer-button"
+                >Add Orders</a
+              >
+            </button>
+          </div>
+        </div>
+
+        <table id="ordersTable">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Customer</th>
+              <th>Quantity</th>
+              <th>Item</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody id="tbody1"></tbody>
+        </table>
       </div>
     </section>
 
@@ -29,6 +62,135 @@
       <p>&copy; 2024 All rights reserved.</p>
     </footer>
 
-    <script src="script.js"></script>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+      import {
+        getDatabase,
+        ref,
+        child,
+        get,
+        set,
+        onValue,
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyA0ngZCZavOM77Z6O2PaSFl3FztHGcjobk",
+        authDomain: "sanders-178b9.firebaseapp.com",
+        databaseURL: "https://sanders-178b9-default-rtdb.firebaseio.com",
+        projectId: "sanders-178b9",
+        storageBucket: "sanders-178b9.appspot.com",
+        messagingSenderId: "225334600973",
+        appId: "1:225334600973:web:39d2f699dd719eecadbc44",
+        measurementId: "G-GMMS2WFE3V",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const db = getDatabase();
+
+      let tbody = document.getElementById("tbody1");
+
+      function AddOrderToTable(date, time, customer, quantity, item, total) {
+        let trow = document.createElement("tr");
+        let td1 = document.createElement("td");
+        let td2 = document.createElement("td");
+        let td3 = document.createElement("td");
+        let td4 = document.createElement("td");
+        let td5 = document.createElement("td");
+        let td6 = document.createElement("td");
+
+        td1.innerHTML = date;
+        td2.innerHTML = time;
+        td3.innerHTML = customer;
+        td4.innerHTML = quantity;
+        td5.innerHTML = item;
+        td6.innerHTML = total;
+
+
+        trow.appendChild(td1);
+        trow.appendChild(td2);
+        trow.appendChild(td3);
+        trow.appendChild(td4);
+        trow.appendChild(td5);
+        trow.appendChild(td6);
+
+        tbody.appendChild(trow);
+      }
+
+      function AddAllOrdersToTable(TheOrders) {
+        tbody.innerHTML = "";
+        TheOrders.forEach((element) => {
+          AddOrderToTable(element.date, element.time, element.customer, element.quantity, element.item, element.total);
+        });
+      }
+
+      function GetAllDataOnce() {
+        const dbRef = ref(db);
+        get(child(dbRef, "orders"))
+          .then((snapshot) => {
+            var Orders = [];
+            snapshot.forEach((childSnapshot) => {
+              Orders.push(childSnapshot.val());
+            });
+            AddAllOrdersToTable(Orders);
+          })
+          .catch((error) => {
+            console.error("Error fetching data: ", error);
+          });
+      }
+
+      function GetAllDataRealtime() {
+        const dbRef = ref(db, "orders");
+        onValue(dbRef, (snapshot) => {
+          var Orders = [];
+          snapshot.forEach((childSnapshot) => {
+            Orders.push(childSnapshot.val());
+          });
+          AddAllOrdersToTable(Orders);
+        });
+      }
+
+      window.onload = GetAllDataOnce;
+
+      document.addEventListener("DOMContentLoaded", (event) => {
+        const searchInput = document.getElementById("searchInput");
+        const searchButton = document.getElementById("searchButton");
+        const table = document.getElementById("ordersTable");
+        const rows = table.getElementsByTagName("tr");
+
+        searchButton.addEventListener("click", () => {
+          const filter = searchInput.value.toLowerCase();
+          for (let i = 1; i < rows.length; i++) {
+            let row = rows[i];
+            let date = row.getElementsByTagName("td")[0];
+            let time = row.getElementsByTagName("td")[1];
+            let customer = row.getElementsByTagName("td")[2];
+            let quantity = row.getElementsByTagName("td")[3];
+            let item = row.getElementsByTagName("td")[4];
+            let total = row.getElementsByTagName("td")[5];
+
+            if (date && time && customer && quantity && item && total) {
+              let dateText = date.textContent || date.innerText;
+              let timeText = time.textContent || time.innerText;
+              let customerText = customer.textContent || customer.innerText;
+              let quantityText = quantity.textContent || quantity.innerText;
+              let itemText = item.textContent || item.innerText;
+              let totalText = total.textContent || total.innerText;
+
+              row.style.display =
+                dateText.toLowerCase().includes(filter) ||
+                timeText.toLowerCase().includes(filter) ||
+                customerText.toLowerCase().includes(filter) ||
+                quantityText.toLowerCase().includes(filter) ||
+                itemText.toLowerCase().includes(filter) ||
+                totalText.toLowerCase().includes(filter)
+                  ? ""
+                  : "none";
+            }
+          }
+        });
+      });
+    </script>
   </body>
 </html>
