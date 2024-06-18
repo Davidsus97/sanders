@@ -21,7 +21,7 @@
         <label for="NameInp">Name</label>
         <input
           type="text"
-          name="Name"
+          name="name"
           id="NameInp"
           placeholder="Name"
           required
@@ -29,8 +29,8 @@
         <br /><br />
         <label for="AddressInp">Address</label>
         <input
-          type="address"
-          name="Address"
+          type="text"
+          name="address"
           id="AddressInp"
           placeholder="Address"
           required
@@ -45,7 +45,7 @@
           required
         />
         <br /><br />
-        <button class="add-customer-button" id="addNamebtn">
+        <button class="add-customer-button" id="addnamebtn">
           Add Customer
         </button>
       </div>
@@ -80,10 +80,10 @@
       let NameInp = document.getElementById("NameInp");
       let AddressInp = document.getElementById("AddressInp");
       let CodeInp = document.getElementById("CodeInp");
-      let addNamebtn = document.getElementById("addNamebtn");
+      let addnamebtn = document.getElementById("addnamebtn");
 
       function AddData() {
-        set(ref(db, "name/" + NameInp.value), {
+        set(ref(db, "customers/" + NameInp.value), {
           name: NameInp.value, // Changed to match retrieval key
           address: AddressInp.value, // Changed to match retrieval key
           code: CodeInp.value, // Changed to match retrieval key
@@ -97,7 +97,7 @@
           });
       }
 
-      addNamebtn.addEventListener("click", AddData);
+      addnamebtn.addEventListener("click", AddData);
     </script>
   </body>
 </html>
