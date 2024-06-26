@@ -18,7 +18,8 @@
     <section id="addorder">
       <div class="tab-content active">
         <h2>Add Order</h2>
-        <label for="DateInp">Item</label>
+
+        <label for="DateInp">Date</label>
         <input
           type="date"
           name="date"
@@ -27,6 +28,7 @@
           required
         />
         <br /><br />
+
         <label for="TimeInp">Time</label>
         <input
           type="time"
@@ -36,40 +38,31 @@
           required
         />
         <br /><br />
-        <label for="CustomerInp">Customer</label>
-        <input
-          type="text"
-          name="customer"
-          id="CustomerInp"
-          placeholder="Customer"
-          required
-        />
+        <label for="customerSelect">Customer</label>
+        <select id="customerSelect" required></select>
         <br /><br />
-        <label for="QuantityInp">Quantity</label>
+
+        <label for="itemSelect">Item</label>
+        <select id="itemSelect" required></select>
+        <br /><br />
+
+        <label for="quantityInp">Quantity</label>
         <input
           type="number"
           name="quantity"
-          id="QuantityInp"
+          id="quantityInp"
           placeholder="Quantity"
           required
         />
         <br /><br />
-        <label for="ItemInp">Item</label>
-        <input
-          type="text"
-          name="item"
-          id="ItemInp"
-          placeholder="Item"
-          required
-        />
-        <br /><br />
-        <label for="TotalInp">Total</label>
+
+        <label for="totalInp">Total</label>
         <input
           type="number"
           name="total"
-          id="TotalInp"
+          id="totalInp"
           placeholder="Total"
-          required
+          readonly
         />
         <br /><br />
         <button class="add-customer-button" id="addorderbtn">Add Order</button>
@@ -84,7 +77,9 @@
       import {
         getDatabase,
         ref,
+        get,
         set,
+        onValue,
       } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
       const firebaseConfig = {
@@ -104,21 +99,76 @@
 
       let DateInp = document.getElementById("DateInp");
       let TimeInp = document.getElementById("TimeInp");
-      let CustomerInp = document.getElementById("CustomerInp");
-      let QuantityInp = document.getElementById("QuantityInp");
-      let ItemInp = document.getElementById("ItemInp");
-      let TotalInp = document.getElementById("TotalInp");
+      let customerSelect = document.getElementById("customerSelect");
+      let itemSelect = document.getElementById("itemSelect");
+      let quantityInp = document.getElementById("quantityInp");
+      let totalInp = document.getElementById("totalInp");
       let addorderbtn = document.getElementById("addorderbtn");
 
-      function AddData() {
-        set(ref(db, "orders/" + DateInp.value), {
-          date: DateInp.value, // Changed to match retrieval key
-          time: TimeInp.value, // Changed to match retrieval key
-          customer: CustomerInp.value, // Changed to match retrieval key
-          quantity: QuantityInp.value, // Changed to match retrieval key
-          item: ItemInp.value, // Changed to match retrieval key
-          total: TotalInp.value, // Changed to match retrieval key
-        })
+      function populateCustomers() {
+        const customerRef = ref(db, "customers");
+        onValue(customerRef, (snapshot) => {
+          const customers = snapshot.val();
+          customerSelect.innerHTML = "";
+          for (const key in customers) {
+            const customer = customers[key];
+            const option = document.createElement("option");
+            option.value = key;
+            option.text = customer.name;
+            customerSelect.appendChild(option);
+          }
+        });
+      }
+
+      function populateItems() {
+        const itemRef = ref(db, "items");
+        onValue(itemRef, (snapshot) => {
+          const items = snapshot.val();
+          itemSelect.innerHTML = ""; // Clear existing options
+          console.log("Items: ", items); // Debugging line
+          for (const key in items) {
+            const item = items[key];
+            const option = document.createElement("option");
+            option.value = key;
+            option.text = item.item; // Assuming "name" field in item object
+            itemSelect.appendChild(option); // Append to itemSelect
+          }
+          console.log("Item Select Options: ", itemSelect.innerHTML); // Debugging line
+        });
+      }
+
+      function calculateTotal() {
+        const selectedItem = itemSelect.value;
+
+        get(ref(db, "items/" + selectedItem)).then((itemSnapshot) => {
+          const item = itemSnapshot.val();
+
+          if (item && item.price) {
+            const quantity = parseInt(quantityInp.value);
+            const total = quantity * item.price;
+            totalInp.value = total;
+          } else {
+            console.error("Missing price information for item");
+            totalInp.value = "Price unavailable";
+          }
+        });
+      }
+
+      // Event listener for "Add Order" button click
+      addorderbtn.addEventListener("click", () => {
+        // Validate form data (optional)
+        // ...
+
+        // Add order to Firebase (assuming you have an "orders" node structure)
+        const orderData = {
+          date: DateInp.value,
+          time: TimeInp.value,
+          customerId: customerSelect.value,
+          itemId: itemSelect.value,
+          quantity: parseInt(quantityInp.value),
+          total: parseFloat(totalInp.value),
+        };
+        set(ref(db, "orders/" + DateInp.value), orderData) // Modified to set data with Date as key
           .then(() => {
             alert("Data Added Successfully");
             window.location.href = "orders.html";
@@ -127,9 +177,13 @@
             alert("Unsuccessful");
             console.log(error);
           });
-      }
+      });
 
-      addorderbtn.addEventListener("click", AddData);
+      quantityInp.addEventListener("input", calculateTotal);
+      itemSelect.addEventListener("change", calculateTotal);
+
+      populateCustomers();
+      populateItems();
     </script>
   </body>
 </html>

@@ -91,7 +91,7 @@
 
       let tbody = document.getElementById("tbody1");
 
-      function AddOrderToTable(date, time, customer, quantity, item, total) {
+      function AddOrderToTable(date, time, customer, item, quantity, total) {
         let trow = document.createElement("tr");
         let td1 = document.createElement("td");
         let td2 = document.createElement("td");
@@ -121,7 +121,7 @@
       function AddAllOrdersToTable(TheOrders) {
         tbody.innerHTML = "";
         TheOrders.forEach((element) => {
-          AddOrderToTable(element.date, element.time, element.customer, element.quantity, element.item, element.total);
+          AddOrderToTable(element.date, element.time, element.customerId, element.itemId, element.quantity, element.total);
         });
       }
 
@@ -165,25 +165,25 @@
             let row = rows[i];
             let date = row.getElementsByTagName("td")[0];
             let time = row.getElementsByTagName("td")[1];
-            let customer = row.getElementsByTagName("td")[2];
-            let quantity = row.getElementsByTagName("td")[3];
-            let item = row.getElementsByTagName("td")[4];
+            let customerId = row.getElementsByTagName("td")[2];
+            let itemId = row.getElementsByTagName("td")[3];
+            let quantity = row.getElementsByTagName("td")[4];            
             let total = row.getElementsByTagName("td")[5];
 
-            if (date && time && customer && quantity && item && total) {
+            if (date && time && customerId && itemId && quantity  && total) {
               let dateText = date.textContent || date.innerText;
               let timeText = time.textContent || time.innerText;
-              let customerText = customer.textContent || customer.innerText;
-              let quantityText = quantity.textContent || quantity.innerText;
-              let itemText = item.textContent || item.innerText;
+              let customerIdText = customerId.textContent || customerId.innerText;
+              let itemIdText = itemId.textContent || itemId.innerText;
+              let quantityText = quantity.textContent || quantity.innerText;              
               let totalText = total.textContent || total.innerText;
 
               row.style.display =
                 dateText.toLowerCase().includes(filter) ||
                 timeText.toLowerCase().includes(filter) ||
-                customerText.toLowerCase().includes(filter) ||
-                quantityText.toLowerCase().includes(filter) ||
-                itemText.toLowerCase().includes(filter) ||
+                customerIdText.toLowerCase().includes(filter) ||
+                itemIDText.toLowerCase().includes(filter) ||
+                quantityText.toLowerCase().includes(filter) ||                
                 totalText.toLowerCase().includes(filter)
                   ? ""
                   : "none";
