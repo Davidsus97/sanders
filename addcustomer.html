@@ -18,6 +18,18 @@
     <section id="addcustomer">
       <div class="tab-content active">
         <h2>Add Customer</h2>
+        <span id="countSpan">Please Wait...</span>
+        <br /><br />
+        <label for="cid">Customer ID</label>
+        <input
+          type="number"
+          name="cid"
+          id="cid"
+          placeholder="Customer ID"
+          required
+          readonly
+        />
+        <br /><br />
         <label for="NameInp">Name</label>
         <input
           type="text"
@@ -60,6 +72,8 @@
         getDatabase,
         ref,
         set,
+        get,
+        update,
       } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
       const firebaseConfig = {
@@ -77,24 +91,66 @@
       const analytics = getAnalytics(app);
       const db = getDatabase();
 
+      let span = document.getElementById("countSpan");
+      let cid = document.getElementById("cid");
       let NameInp = document.getElementById("NameInp");
       let AddressInp = document.getElementById("AddressInp");
       let CodeInp = document.getElementById("CodeInp");
       let addnamebtn = document.getElementById("addnamebtn");
+      let countVariable;
+
+      window.onload = function () {
+        const dbRef = ref(db, "custom");
+
+        get(dbRef)
+          .then((snapshot) => {
+            if (snapshot.exists()) {
+              countVariable = Number(snapshot.val());
+              span.innerHTML = countVariable;
+              cid.value = countVariable;
+            } else {
+              span.innerHTML = "No data available";
+              cid.value = 1;  // Default value if no data available
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+            span.innerHTML = "Error retrieving data";
+          });
+      };
 
       function AddData() {
-        set(ref(db, "customers/" + NameInp.value), {
-          name: NameInp.value, // Changed to match retrieval key
-          address: AddressInp.value, // Changed to match retrieval key
-          code: CodeInp.value, // Changed to match retrieval key
+        set(ref(db, "customers/" + cid.value), {
+          cid: cid.value,
+          name: NameInp.value,
+          address: AddressInp.value,
+          code: CodeInp.value,
         })
           .then(() => {
             alert("Data Added Successfully");
+            incrementCounter();
             window.location.href = "index.html";
           })
           .catch((error) => {
             alert("Unsuccessful");
             console.log(error);
+          });
+      }
+
+      function incrementCounter() {
+        const newCount = countVariable + 1;
+        const updates = {};
+        updates["/custom"] = newCount;
+
+        update(ref(db), updates)
+          .then(() => {
+            span.innerHTML = newCount;
+            cid.value = newCount;
+            countVariable = newCount;
+          })
+          .catch((error) => {
+            console.error(error);
+            span.innerHTML = "Error updating counter";
           });
       }
 

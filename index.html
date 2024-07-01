@@ -46,6 +46,7 @@
         <table id="customersTable">
           <thead>
             <tr>
+              <th>Customer ID</th>
               <th>Name</th>
               <th>Address</th>
               <th>Code</th>
@@ -87,6 +88,7 @@
       const analytics = getAnalytics(app);
       const db = getDatabase();
 
+      var cid = 0;
       let tbody = document.getElementById("tbody1");
 
       function AddCustomerToTable(name, address, code) {
@@ -94,19 +96,23 @@
         let td1 = document.createElement("td");
         let td2 = document.createElement("td");
         let td3 = document.createElement("td");
+        let td4 = document.createElement("td");
 
-        td1.innerHTML = name;
-        td2.innerHTML = address;
-        td3.innerHTML = code;
+        td1.innerHTML = ++cid;
+        td2.innerHTML = name;
+        td3.innerHTML = address;
+        td4.innerHTML = code;
 
         trow.appendChild(td1);
         trow.appendChild(td2);
         trow.appendChild(td3);
+        trow.appendChild(td4);
 
         tbody.appendChild(trow);
       }
 
       function AddAllCustomersToTable(TheCustomers) {
+        cid = 0;
         tbody.innerHTML = "";
         TheCustomers.forEach((element) => {
           AddCustomerToTable(element.name, element.address, element.code);
@@ -151,16 +157,19 @@
           const filter = searchInput.value.toLowerCase();
           for (let i = 1; i < rows.length; i++) {
             let row = rows[i];
-            let name = row.getElementsByTagName("td")[0];
-            let address = row.getElementsByTagName("td")[1];
-            let code = row.getElementsByTagName("td")[2];
+            let cid = row.getElementsByTagName("td")[0];
+            let name = row.getElementsByTagName("td")[1];
+            let address = row.getElementsByTagName("td")[2];
+            let code = row.getElementsByTagName("td")[3];
 
-            if (name && address && code) {
+            if (cid && name && address && code) {
+              let cidText = cid.textContent || cid.innerText;
               let nameText = name.textContent || name.innerText;
               let addressText = address.textContent || address.innerText;
               let codeText = code.textContent || code.innerText;
 
               row.style.display =
+                cidText.toLowerCase().includes(filter) ||
                 nameText.toLowerCase().includes(filter) ||
                 addressText.toLowerCase().includes(filter) ||
                 codeText.toLowerCase().includes(filter)
