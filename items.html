@@ -43,6 +43,7 @@
         <table id="itemsTable">
           <thead>
             <tr>
+              <th>Item ID</th>
               <th>Item</th>
               <th>Price</th>
               <th>Weight</th>
@@ -84,6 +85,7 @@
       const analytics = getAnalytics(app);
       const db = getDatabase();
 
+      var iid = 0;
       let tbody = document.getElementById("tbody1");
 
       function AddItemToTable(item, price, weight) {
@@ -91,19 +93,23 @@
         let td1 = document.createElement("td");
         let td2 = document.createElement("td");
         let td3 = document.createElement("td");
+        let td4 = document.createElement("td");
 
-        td1.innerHTML = item;
-        td2.innerHTML = price;
-        td3.innerHTML = weight;
+        td1.innerHTML = ++ iid;
+        td2.innerHTML = item;
+        td3.innerHTML = price;
+        td4.innerHTML = weight;
 
         trow.appendChild(td1);
         trow.appendChild(td2);
         trow.appendChild(td3);
+        trow.appendChild(td4);
 
         tbody.appendChild(trow);
       }
 
       function AddAllItemsToTable(TheItems) {
+        iid = 0;
         tbody.innerHTML = "";
         TheItems.forEach((element) => {
           AddItemToTable(element.item, element.price, element.weight);
@@ -148,16 +154,19 @@
           const filter = searchInput.value.toLowerCase();
           for (let i = 1; i < rows.length; i++) {
             let row = rows[i];
-            let item = row.getElementsByTagName("td")[0];
-            let price = row.getElementsByTagName("td")[1];
-            let weight = row.getElementsByTagName("td")[2];
+            let iid = row.getElementsByTagName("td")[0];
+            let item = row.getElementsByTagName("td")[1];
+            let price = row.getElementsByTagName("td")[2];
+            let weight = row.getElementsByTagName("td")[3];
 
-            if (item && price && weight) {
+            if (iid &&item && price && weight) {
+              let iidText = iid.textContent || iid.innerText;
               let itemText = item.textContent || item.innerText;
               let priceText = price.textContent || price.innerText;
               let weightText = weight.textContent || weight.innerText;
 
               row.style.display =
+                iidText.toLowerCase().includes(filter) ||
                 itemText.toLowerCase().includes(filter) ||
                 priceText.toLowerCase().includes(filter) ||
                 weightText.toLowerCase().includes(filter)

@@ -18,6 +18,17 @@
     <section id="addorder">
       <div class="tab-content active">
         <h2>Add Order</h2>
+        <input type="hidden" id="countHidden" />
+        <label for="oid">Order ID</label>
+        <input
+          type="number"
+          name="oid"
+          id="oid"
+          placeholder="Order ID"
+          required
+          readonly
+        />
+        <br /><br />
 
         <label for="DateInp">Date</label>
         <input
@@ -98,93 +109,127 @@
       const analytics = getAnalytics(app);
       const db = getDatabase();
 
-      let DateInp = document.getElementById("DateInp");
-      let TimeInp = document.getElementById("TimeInp");
-      let customerSelect = document.getElementById("customerSelect");
-      let itemSelect = document.getElementById("itemSelect");
-      let quantityInp = document.getElementById("quantityInp");
-      let totalInp = document.getElementById("totalInp");
-      let addorderbtn = document.getElementById("addorderbtn");
+      let countVariable;
 
-      function populateCustomers() {
-        const customerRef = ref(db, "customers");
-        onValue(customerRef, (snapshot) => {
-          const customers = snapshot.val();
-          customerSelect.innerHTML = "";
-          for (const key in customers) {
-            const customer = customers[key];
-            const option = document.createElement("option");
-            option.value = key;
-            option.text = customer.name;
-            customerSelect.appendChild(option);
-          }
-        });
-      }
+      window.onload = function () {
+        const countHidden = document.getElementById("countHidden");
+        const oid = document.getElementById("oid");
+        const DateInp = document.getElementById("DateInp");
+        const TimeInp = document.getElementById("TimeInp");
+        const customerSelect = document.getElementById("customerSelect");
+        const itemSelect = document.getElementById("itemSelect");
+        const quantityInp = document.getElementById("quantityInp");
+        const totalInp = document.getElementById("totalInp");
+        const addorderbtn = document.getElementById("addorderbtn");
 
-      function populateItems() {
-        const itemRef = ref(db, "items");
-        onValue(itemRef, (snapshot) => {
-          const items = snapshot.val();
-          itemSelect.innerHTML = ""; // Clear existing options
-          console.log("Items: ", items); // Debugging line
-          for (const key in items) {
-            const item = items[key];
-            const option = document.createElement("option");
-            option.value = key;
-            option.text = item.item; // Assuming "name" field in item object
-            itemSelect.appendChild(option); // Append to itemSelect
-          }
-          console.log("Item Select Options: ", itemSelect.innerHTML); // Debugging line
-        });
-      }
+        const dbRef = ref(db, "orid");
 
-      function calculateTotal() {
-        const selectedItem = itemSelect.value;
+        populateCustomers();
+        populateItems();
 
-        get(ref(db, "items/" + selectedItem)).then((itemSnapshot) => {
-          const item = itemSnapshot.val();
-
-          if (item && item.price) {
-            const quantity = parseInt(quantityInp.value);
-            const total = quantity * item.price;
-            totalInp.value = total;
-          } else {
-            console.error("Missing price information for item");
-            totalInp.value = "Price unavailable";
-          }
-        });
-      }
-
-      // Event listener for "Add Order" button click
-      addorderbtn.addEventListener("click", () => {
-        // Validate form data (optional)
-        // ...
-
-        // Add order to Firebase (assuming you have an "orders" node structure)
-        const orderData = {
-          date: DateInp.value,
-          time: TimeInp.value,
-          customerId: customerSelect.value,
-          itemId: itemSelect.value,
-          quantity: parseInt(quantityInp.value),
-          total: parseFloat(totalInp.value),
-        };
-        set(ref(db, "orders/" + DateInp.value), orderData) // Modified to set data with Date as key
-          .then(() => {
-            alert("Data Added Successfully");
-            window.location.href = "orders.html";
+        get(dbRef)
+          .then((snapshot) => {
+            if (snapshot.exists()) {
+              countVariable = Number(snapshot.val());
+              countHidden.value = countVariable;
+              oid.value = countVariable;
+            } else {
+              countHidden.value = 1;
+              oid.value = 1;
+            }
           })
           .catch((error) => {
-            alert("Unsuccessful");
-            console.log(error);
+            console.error(error);
           });
-      });
 
-      quantityInp.addEventListener("input", calculateTotal);
-      itemSelect.addEventListener("change", calculateTotal);
+        function populateCustomers() {
+          const customerRef = ref(db, "customers");
+          onValue(customerRef, (snapshot) => {
+            const customers = snapshot.val();
+            customerSelect.innerHTML = "";
+            for (const key in customers) {
+              const customer = customers[key];
+              const option = document.createElement("option");
+              option.value = key;
+              option.text = customer.name;
+              customerSelect.appendChild(option);
+            }
+          });
+        }
 
-      populateCustomers();
-      populateItems();
+        function populateItems() {
+          const itemRef = ref(db, "items");
+          onValue(itemRef, (snapshot) => {
+            const items = snapshot.val();
+            itemSelect.innerHTML = "";
+            for (const key in items) {
+              const item = items[key];
+              const option = document.createElement("option");
+              option.value = key;
+              option.text = item.item;
+              itemSelect.appendChild(option);
+            }
+          });
+        }
+
+        function calculateTotal() {
+          const selectedItem = itemSelect.value;
+
+          get(ref(db, "items/" + selectedItem)).then((itemSnapshot) => {
+            const item = itemSnapshot.val();
+
+            if (item && item.price) {
+              const quantity = parseInt(quantityInp.value);
+              const total = quantity * item.price;
+              totalInp.value = total;
+            } else {
+              console.error("Missing price information for item");
+              totalInp.value = "Price unavailable";
+            }
+          });
+        }
+
+        addorderbtn.addEventListener("click", () => {
+          const orderData = {
+            oid: oid.value,
+            date: DateInp.value,
+            time: TimeInp.value,
+            customerId: customerSelect.value,
+            itemId: itemSelect.value,
+            quantity: parseInt(quantityInp.value),
+            total: parseFloat(totalInp.value),
+          };
+          set(ref(db, "orders/" + oid.value), orderData)
+            .then(() => {
+              alert("Data Added Successfully");
+              incrementCounter();
+              window.location.href = "orders.html";
+            })
+            .catch((error) => {
+              alert("Unsuccessful");
+              console.log(error);
+            });
+        });
+
+        function incrementCounter() {
+          const newCount = countVariable + 1;
+          const updates = {};
+          updates["/orid"] = newCount;
+
+          update(ref(db), updates)
+            .then(() => {
+              countHidden.value = newCount;
+              oid.value = newCount;
+              countVariable = newCount;
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        }
+
+        quantityInp.addEventListener("input", calculateTotal);
+        itemSelect.addEventListener("change", calculateTotal);
+      };
     </script>
   </body>
 </html>

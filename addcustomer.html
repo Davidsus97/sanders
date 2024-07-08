@@ -18,8 +18,7 @@
     <section id="addcustomer">
       <div class="tab-content active">
         <h2>Add Customer</h2>
-        <span id="countSpan">Please Wait...</span>
-        <br /><br />
+        <input type="hidden" id="countHidden" />
         <label for="cid">Customer ID</label>
         <input
           type="number"
@@ -91,7 +90,7 @@
       const analytics = getAnalytics(app);
       const db = getDatabase();
 
-      let span = document.getElementById("countSpan");
+      let countHidden = document.getElementById("countHidden");
       let cid = document.getElementById("cid");
       let NameInp = document.getElementById("NameInp");
       let AddressInp = document.getElementById("AddressInp");
@@ -106,16 +105,15 @@
           .then((snapshot) => {
             if (snapshot.exists()) {
               countVariable = Number(snapshot.val());
-              span.innerHTML = countVariable;
+              countHidden.value = countVariable;
               cid.value = countVariable;
             } else {
-              span.innerHTML = "No data available";
-              cid.value = 1;  // Default value if no data available
+              countHidden.value = 1; // Default value if no data available
+              cid.value = 1;
             }
           })
           .catch((error) => {
             console.error(error);
-            span.innerHTML = "Error retrieving data";
           });
       };
 
@@ -144,13 +142,12 @@
 
         update(ref(db), updates)
           .then(() => {
-            span.innerHTML = newCount;
+            countHidden.value = newCount;
             cid.value = newCount;
             countVariable = newCount;
           })
           .catch((error) => {
             console.error(error);
-            span.innerHTML = "Error updating counter";
           });
       }
 

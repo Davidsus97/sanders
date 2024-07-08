@@ -18,6 +18,17 @@
     <section id="additem">
       <div class="tab-content active">
         <h2>Add Item</h2>
+        <input type="hidden" id="countHidden" />
+        <label for="iid">Item ID</label>
+        <input
+          type="number"
+          name="iid"
+          id="iid"
+          placeholder="Item ID"
+          required
+          readonly
+        />
+        <br /><br />
         <label for="ItemInp">Item</label>
         <input
           type="text"
@@ -58,6 +69,8 @@
         getDatabase,
         ref,
         set,
+        get,
+        update,
       } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
       const firebaseConfig = {
@@ -72,31 +85,70 @@
       };
 
       const app = initializeApp(firebaseConfig);
-      const analytics = getAnalytics(app);
-      const db = getDatabase();
+  const analytics = getAnalytics(app);
+  const db = getDatabase();
 
-      let ItemInp = document.getElementById("ItemInp");
-      let PriceInp = document.getElementById("PriceInp");
-      let WeightInp = document.getElementById("WeightInp");
-      let additembtn = document.getElementById("additembtn");
+  let oid = document.getElementById("oid");
+  let customerSelect = document.getElementById("customerSelect");
+  let itemSelect = document.getElementById("itemSelect");
+  let quantityInp = document.getElementById("quantityInp");
+  let addorderbtn = document.getElementById("addorderbtn");
+  let countVariable;
 
-      function AddData() {
-        set(ref(db, "items/" + ItemInp.value), {
-          item: ItemInp.value, // Changed to match retrieval key
-          price: PriceInp.value, // Changed to match retrieval key
-          weight: WeightInp.value, // Changed to match retrieval key
-        })
-          .then(() => {
-            alert("Data Added Successfully");
-            window.location.href = "items.html";
-          })
-          .catch((error) => {
-            alert("Unsuccessful");
-            console.log(error);
-          });
-      }
+  window.onload = function () {
+    const dbRefOrid = ref(db, "orid"); // Reference for order ID
 
-      additembtn.addEventListener("click", AddData);
-    </script>
+    get(dbRefOrid)
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          countVariable = Number(snapshot.val());
+          oid.value = countVariable; // Set initial order ID value
+        } else {
+          countVariable = 1;
+          oid.value = 1;
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+
+// Alternatively, set the value after a slight delay:
+setTimeout(() => {
+  oid.value = countVariable; // Assuming countVariable is retrieved elsewhere
+}, 100); // Adjust delay as needed (in milliseconds)
+
+  function incrementOrderId() {
+    const updates = {};
+    updates["/orid"] = countVariable + 1; // Update "orid" reference
+
+    update(ref(db), updates)
+      .then(() => {
+        countVariable++; // Update in-memory counter
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  addorderbtn.addEventListener("click", () => {
+    const orderData = {
+      oid: oid.value,
+      // Other order data fields...
+    };
+
+    set(ref(db, "orders/" + oid.value), orderData)
+      .then(() => {
+        alert("Data Added Successfully");
+        incrementOrderId(); // Increment order ID after successful addition
+        window.location.href = "orders.html";
+      })
+      .catch((error) => {
+        alert("Unsuccessful");
+        console.log(error);
+      });
+  });
+</script>
   </body>
 </html>
