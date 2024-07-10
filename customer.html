@@ -3,55 +3,54 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Orders</title>
+    <title>logo sanders bakery</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
 
   <body>
     <header>
-      <h1>Orders</h1>
+      <h1>Customer</h1>
     </header>
 
     <nav class="tabs">
       <a href="index.html" class="tab">Home</a>
-      <a href="customer.html" class="tab">Customer</a>
+      <a href="#customer" class="tab">Customer</a>
       <a href="items.html" class="tab">Items</a>
-      <a href="#orders" class="tab">Orders</a>
+      <a href="orders.html" class="tab">Orders</a>
     </nav>
 
-    <section id="orders">
+    <section id="customer">
+      <!-- Tab Content for Customers -->
       <div class="tab-content active">
-        <h2>Orders</h2>
+        <h2>Customers</h2>
 
-        <!-- Search Bar and Button -->
+        <!-- Search and Add Customer Section -->
         <div class="search-add-section">
           <div class="search-section">
             <input
               type="text"
               id="searchInput"
-              placeholder="Search for orders..."
+              placeholder="Search by Customers..."
             />
             <button id="searchButton">Search</button>
           </div>
 
           <div class="add-customer-button">
             <button class="add-customer-button">
-              <a href="addorders.html" class="add-customer-button"
-                >Add Orders</a
+              <a href="addcustomer.html" class="add-customer-button"
+                >Add Customer</a
               >
             </button>
           </div>
         </div>
 
-        <table id="ordersTable">
+        <table id="customersTable">
           <thead>
             <tr>
-              <th>Date</th>
-              <th>Time</th>
-              <th>Customer</th>
-              <th>Quantity</th>
-              <th>Item</th>
-              <th>Total</th>
+              <th>Customer ID</th>
+              <th>Name</th>
+              <th>Address</th>
+              <th>Code</th>
             </tr>
           </thead>
           <tbody id="tbody1"></tbody>
@@ -90,51 +89,46 @@
       const analytics = getAnalytics(app);
       const db = getDatabase();
 
+      var cid = 0;
       let tbody = document.getElementById("tbody1");
 
-      function AddOrderToTable(date, time, customer, item, quantity, total) {
+      function AddCustomerToTable(name, address, code) {
         let trow = document.createElement("tr");
         let td1 = document.createElement("td");
         let td2 = document.createElement("td");
         let td3 = document.createElement("td");
         let td4 = document.createElement("td");
-        let td5 = document.createElement("td");
-        let td6 = document.createElement("td");
 
-        td1.innerHTML = date;
-        td2.innerHTML = time;
-        td3.innerHTML = customer;
-        td4.innerHTML = quantity;
-        td5.innerHTML = item;
-        td6.innerHTML = total;
-
+        td1.innerHTML = ++cid;
+        td2.innerHTML = name;
+        td3.innerHTML = address;
+        td4.innerHTML = code;
 
         trow.appendChild(td1);
         trow.appendChild(td2);
         trow.appendChild(td3);
         trow.appendChild(td4);
-        trow.appendChild(td5);
-        trow.appendChild(td6);
 
         tbody.appendChild(trow);
       }
 
-      function AddAllOrdersToTable(TheOrders) {
+      function AddAllCustomersToTable(TheCustomers) {
+        cid = 0;
         tbody.innerHTML = "";
-        TheOrders.forEach((element) => {
-          AddOrderToTable(element.date, element.time, element.customerId, element.itemId, element.quantity, element.total);
+        TheCustomers.forEach((element) => {
+          AddCustomerToTable(element.name, element.address, element.code);
         });
       }
 
       function GetAllDataOnce() {
         const dbRef = ref(db);
-        get(child(dbRef, "orders"))
+        get(child(dbRef, "customers"))
           .then((snapshot) => {
-            var Orders = [];
+            var Customers = [];
             snapshot.forEach((childSnapshot) => {
-              Orders.push(childSnapshot.val());
+              Customers.push(childSnapshot.val());
             });
-            AddAllOrdersToTable(Orders);
+            AddAllCustomersToTable(Customers);
           })
           .catch((error) => {
             console.error("Error fetching data: ", error);
@@ -142,13 +136,13 @@
       }
 
       function GetAllDataRealtime() {
-        const dbRef = ref(db, "orders");
+        const dbRef = ref(db, "customers");
         onValue(dbRef, (snapshot) => {
-          var Orders = [];
+          var Customers = [];
           snapshot.forEach((childSnapshot) => {
-            Orders.push(childSnapshot.val());
+            Customers.push(childSnapshot.val());
           });
-          AddAllOrdersToTable(Orders);
+          AddAllCustomersToTable(Customers);
         });
       }
 
@@ -157,35 +151,29 @@
       document.addEventListener("DOMContentLoaded", (event) => {
         const searchInput = document.getElementById("searchInput");
         const searchButton = document.getElementById("searchButton");
-        const table = document.getElementById("ordersTable");
+        const table = document.getElementById("customersTable");
         const rows = table.getElementsByTagName("tr");
 
         searchButton.addEventListener("click", () => {
           const filter = searchInput.value.toLowerCase();
           for (let i = 1; i < rows.length; i++) {
             let row = rows[i];
-            let date = row.getElementsByTagName("td")[0];
-            let time = row.getElementsByTagName("td")[1];
-            let customerId = row.getElementsByTagName("td")[2];
-            let itemId = row.getElementsByTagName("td")[3];
-            let quantity = row.getElementsByTagName("td")[4];            
-            let total = row.getElementsByTagName("td")[5];
+            let cid = row.getElementsByTagName("td")[0];
+            let name = row.getElementsByTagName("td")[1];
+            let address = row.getElementsByTagName("td")[2];
+            let code = row.getElementsByTagName("td")[3];
 
-            if (date && time && customerId && itemId && quantity  && total) {
-              let dateText = date.textContent || date.innerText;
-              let timeText = time.textContent || time.innerText;
-              let customerIdText = customerId.textContent || customerId.innerText;
-              let itemIdText = itemId.textContent || itemId.innerText;
-              let quantityText = quantity.textContent || quantity.innerText;              
-              let totalText = total.textContent || total.innerText;
+            if (cid && name && address && code) {
+              let cidText = cid.textContent || cid.innerText;
+              let nameText = name.textContent || name.innerText;
+              let addressText = address.textContent || address.innerText;
+              let codeText = code.textContent || code.innerText;
 
               row.style.display =
-                dateText.toLowerCase().includes(filter) ||
-                timeText.toLowerCase().includes(filter) ||
-                customerIdText.toLowerCase().includes(filter) ||
-                itemIDText.toLowerCase().includes(filter) ||
-                quantityText.toLowerCase().includes(filter) ||                
-                totalText.toLowerCase().includes(filter)
+                cidText.toLowerCase().includes(filter) ||
+                nameText.toLowerCase().includes(filter) ||
+                addressText.toLowerCase().includes(filter) ||
+                codeText.toLowerCase().includes(filter)
                   ? ""
                   : "none";
             }
