@@ -51,6 +51,9 @@ function register() {
         favourite_song: favourite_song,
         milk_before_cereal: milk_before_cereal,
         last_login: Date.now(),
+        custom: 1,
+        itid: 1,
+        orid: 1,
       };
 
       database_ref.child("users/" + user.uid).set(user_data);
