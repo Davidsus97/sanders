@@ -1,8 +1,4 @@
 // Your web app's Firebase configuration
-
-const { default: firebase } = require("firebase/compat/app");
-
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyA0ngZCZavOM77Z6O2PaSFl3FztHGcjobk",
   authDomain: "sanders-178b9.firebaseapp.com",
@@ -15,53 +11,95 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+firebase.initializeApp(firebaseConfig);
 
+// Get references to the auth and database services
+const auth = firebase.auth();
+const database = firebase.database();
 
-const auth = firebase.auth()
-const database = firebase.database()
+function register() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const full_name = document.getElementById("full_name").value;
+  const favourite_song = document.getElementById("favourite_song").value;
+  const milk_before_cereal =
+    document.getElementById("milk_before_cereal").value;
 
-function register(){
-    email = document.getElementById('email').value
-    password = document.getElementById('password').value
-    full_name = document.getElementById('full_name').value
-    favourite_song = document.getElementById('favourite_song').value
-    milk_before_cereal = document.getElementById('milk_before_cereal').value
+  if (!validate_email(email) || !validate_password(password)) {
+    alert("Email or Password is Outta Line!!");
+    return;
+  }
+  if (
+    !validate_field(full_name) ||
+    !validate_field(favourite_song) ||
+    !validate_field(milk_before_cereal)
+  ) {
+    alert("One or More Extra Fields is Outta Line!!");
+    return;
+  }
 
-    if (validate_email(email) == false || validate_password(password) == false ){
-        alert ('Email or Password is Outta Line!!')
-        return
-    }
-    if (validate_field(full_name) == false || validate_field(favourite_song) == false || validate_field(milk_before_cereal) == false)
-        alert('One or More Extra Fields is Outta Line!!')
-    return
+  auth
+    .createUserWithEmailAndPassword(email, password)
+    .then(function () {
+      const user = auth.currentUser;
+      const database_ref = database.ref();
+
+      const user_data = {
+        full_name: full_name,
+        email: email,
+        favourite_song: favourite_song,
+        milk_before_cereal: milk_before_cereal,
+        last_login: Date.now(),
+      };
+
+      database_ref.child("users/" + user.uid).set(user_data);
+
+      alert("User Created!!");
+    })
+    .catch(function (error) {
+      const error_message = error.message;
+      alert(error_message);
+    });
 }
 
-function validate_email (email) {
-   expression = /^[^@]+@\w+(\.\w+)+\w$/
-    if(expression.test(email) == true){
-        return true
-    } else {
-        return false
-    }
+function login() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  if (!validate_email(email) || !validate_password(password)) {
+    alert("Email or Password is Outta Line!!");
+    return;
+  }
+
+  auth
+    .signInWithEmailAndPassword(email, password)
+    .then(function () {
+      const user = auth.currentUser;
+      const database_ref = database.ref();
+
+      const user_data = {
+        last_login: Date.now(),
+      };
+
+      database_ref.child("users/" + user.uid).update(user_data);
+
+      alert("User Logged In!!");
+    })
+    .catch(function (error) {
+      const error_message = error.message;
+      alert(error_message);
+    });
 }
 
-function validate_password(password){
-    if(password < 6) {
-        return false
-    } else {
-        return true
-    }
+function validate_email(email) {
+  const expression = /^[^@]+@\w+(\.\w+)+\w$/;
+  return expression.test(email);
+}
+
+function validate_password(password) {
+  return password.length >= 6;
 }
 
 function validate_field(field) {
-    if (field == null) {
-        return false
-    }
-    if (field.length<= 0) {
-        return false
-    } else {
-        return true
-    }
+  return field != null && field.length > 0;
 }
