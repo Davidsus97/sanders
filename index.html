@@ -1,64 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login + Firebase Database</title>
-  <link rel="stylesheet" href="index.css" />
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Bowlby+One+SC&display=swap" rel="stylesheet">
-</head>
-<body id="page_container">
-  <header>
-    <h1>Home</h1>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login + Firebase Database</title>
+    <link rel="stylesheet" href="index.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bowlby+One+SC&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body id="page_container">
+    <header>
+      <h1>Home</h1>
+    </header>
 
-  <nav class="tabs">
-    <a href="#index" class="tab">Home</a>
-    <a href="customer.html" class="tab">Customer</a>
-    <a href="items.html" class="tab">Items</a>
-    <a href="orders.html" class="tab">Orders</a>
-  </nav>
+    <nav class="tabs">
+      <a href="#index" class="tab">Home</a>
+      <a href="customer.html" class="tab">Customer</a>
+      <a href="items.html" class="tab">Items</a>
+      <a href="orders.html" class="tab">Orders</a>
+    </nav>
 
-  <section id="index">
-    <div class="tab-content active">
-      <br>
-      <div id="content_container">
-        <div id="form_container">
-          <div id="form_header_container">
-            <h2 id="form_header">Login + Firebase Database</h2>
-          </div>
-          <div id="form_content_container">
-            <div id="form_content_inner_container">
-              <input type="text" id="full_name" placeholder="Full Name">
-              <input type="email" id="email" placeholder="Email">
-              <input type="password" id="password" placeholder="New Password">
-              <input type="text" id="favourite_song" placeholder="The Best Song Ever">
-              <input type="text" id="milk_before_cereal" placeholder="Milk Before Cereal? ( Yes | No )">
-              <div id="button_container">
-                <button onclick="login()">Login</button>
-                <button onclick="register()">Register</button>
+    <section id="index">
+      <div class="tab-content active">
+        <br />
+        <div id="content_container">
+          <div id="form_container">
+            <div id="form_header_container">
+              <h2 id="form_header">Login + Firebase Database</h2>
+            </div>
+            <div id="form_content_container">
+              <div id="form_content_inner_container">
+                <input type="text" id="full_name" placeholder="Full Name" />
+                <input type="email" id="email" placeholder="Email" />
+                <input
+                  type="password"
+                  id="password"
+                  placeholder="New Password"
+                />
+                <input
+                  type="text"
+                  id="favourite_song"
+                  placeholder="The Best Song Ever"
+                />
+                <input
+                  type="text"
+                  id="milk_before_cereal"
+                  placeholder="Milk Before Cereal? ( Yes | No )"
+                />
+                <div id="button_container">
+                  <button onclick="login()">Login</button>
+                  <button onclick="register()">Register</button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div> 
-    </div>
-  </section>
+      </div>
+    </section>
 
-  <footer>
-    <p>&copy; 2024 All rights reserved.</p>
-  </footer>
+    <footer>
+      <p>&copy; 2024 All rights reserved.</p>
+    </footer>
 
-  <!-- Firebase JS SDKs included as regular scripts -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <!-- Firebase JS SDKs included as regular scripts -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
-  <!-- Your custom script -->
-  <script src="index.js"></script>
-</body>
+    <!-- Your custom script -->
+    <script src="index.js"></script>
+  </body>
 </html>

@@ -10,7 +10,14 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(25deg, #ffbe0b, #fb5607, #ff006e, #8338ec, #3a86ff);
+  background: linear-gradient(
+    25deg,
+    #ffbe0b,
+    #fb5607,
+    #ff006e,
+    #8338ec,
+    #3a86ff
+  );
   overflow-x: hidden; /* Hide horizontal overflow */
 }
 
@@ -47,8 +54,15 @@ body {
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 1px;
-  background: linear-gradient(25deg, #ffbe0b, #fb5607, #ff006e, #8338ec, #3a86ff);
-  -webkit-background-clip: text;
+  background: linear-gradient(
+    25deg,
+    #ffbe0b,
+    #fb5607,
+    #ff006e,
+    #8338ec,
+    #3a86ff
+  );
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   text-align: center;
   padding-right: 35px;
@@ -79,13 +93,27 @@ input {
   border-bottom: 2px solid transparent;
   border-top-left-radius: 2%;
   border-top-right-radius: 2%;
-  border-image: linear-gradient(25deg, #ffbe0b, #fb5607, #ff006e, #8338ec, #3a86ff) 1;
+  border-image: linear-gradient(
+      25deg,
+      #ffbe0b,
+      #fb5607,
+      #ff006e,
+      #8338ec,
+      #3a86ff
+    )
+    1;
 }
 
 #button_container {
-  width: calc(100% + 5px );
+  width: calc(100% + 5px);
   height: 50px;
-  background-image: linear-gradient(80deg, #ffbe0b, #fb5607 50%, #ff006e 50%, #8338ec);
+  background-image: linear-gradient(
+    80deg,
+    #ffbe0b,
+    #fb5607 50%,
+    #ff006e 50%,
+    #8338ec
+  );
   color: #fff;
   margin-top: 5px;
   display: flex;
