@@ -47,6 +47,7 @@ function register() {
       const user_data = {
         full_name: full_name,
         email: email,
+        password: password,
         favourite_song: favourite_song,
         milk_before_cereal: milk_before_cereal,
         last_login: Date.now(),
