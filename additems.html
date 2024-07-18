@@ -11,10 +11,12 @@
       <h1>Add Item</h1>
     </header>
     <nav class="tabs">
-      <a href="index.html" class="tab">Home</a>
-      <a href="customer.html" class="tab">Customer</a>
-      <a href="items.html" class="tab">Items</a>
-      <a href="orders.html" class="tab">Orders</a>
+      <ul>
+        <li><a href="#index" class="tab">Home</a></li>
+        <li><a href="customer.html" class="tab">Customer</a></li>
+        <li><a href="items.html" class="tab">Items</a></li>
+        <li><a href="orders.html" class="tab">Orders</a></li>
+      </ul>
     </nav>
     <section id="additem">
       <div class="tab-content active">
@@ -86,70 +88,69 @@
       };
 
       const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-  const db = getDatabase();
+      const analytics = getAnalytics(app);
+      const db = getDatabase();
 
-  let oid = document.getElementById("oid");
-  let customerSelect = document.getElementById("customerSelect");
-  let itemSelect = document.getElementById("itemSelect");
-  let quantityInp = document.getElementById("quantityInp");
-  let addorderbtn = document.getElementById("addorderbtn");
-  let countVariable;
+      let oid = document.getElementById("oid");
+      let customerSelect = document.getElementById("customerSelect");
+      let itemSelect = document.getElementById("itemSelect");
+      let quantityInp = document.getElementById("quantityInp");
+      let addorderbtn = document.getElementById("addorderbtn");
+      let countVariable;
 
-  window.onload = function () {
-    const dbRefOrid = ref(db, "orid"); // Reference for order ID
+      window.onload = function () {
+        const dbRefOrid = ref(db, "orid"); // Reference for order ID
 
-    get(dbRefOrid)
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          countVariable = Number(snapshot.val());
-          oid.value = countVariable; // Set initial order ID value
-        } else {
-          countVariable = 1;
-          oid.value = 1;
-        }
-      })
-      .catch((error) => {
-        console.error(error);
+        get(dbRefOrid)
+          .then((snapshot) => {
+            if (snapshot.exists()) {
+              countVariable = Number(snapshot.val());
+              oid.value = countVariable; // Set initial order ID value
+            } else {
+              countVariable = 1;
+              oid.value = 1;
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      };
+
+      // Alternatively, set the value after a slight delay:
+      setTimeout(() => {
+        oid.value = countVariable; // Assuming countVariable is retrieved elsewhere
+      }, 100); // Adjust delay as needed (in milliseconds)
+
+      function incrementOrderId() {
+        const updates = {};
+        updates["/orid"] = countVariable + 1; // Update "orid" reference
+
+        update(ref(db), updates)
+          .then(() => {
+            countVariable++; // Update in-memory counter
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+
+      addorderbtn.addEventListener("click", () => {
+        const orderData = {
+          oid: oid.value,
+          // Other order data fields...
+        };
+
+        set(ref(db, "orders/" + oid.value), orderData)
+          .then(() => {
+            alert("Data Added Successfully");
+            incrementOrderId(); // Increment order ID after successful addition
+            window.location.href = "orders.html";
+          })
+          .catch((error) => {
+            alert("Unsuccessful");
+            console.log(error);
+          });
       });
-  };
-
-
-// Alternatively, set the value after a slight delay:
-setTimeout(() => {
-  oid.value = countVariable; // Assuming countVariable is retrieved elsewhere
-}, 100); // Adjust delay as needed (in milliseconds)
-
-  function incrementOrderId() {
-    const updates = {};
-    updates["/orid"] = countVariable + 1; // Update "orid" reference
-
-    update(ref(db), updates)
-      .then(() => {
-        countVariable++; // Update in-memory counter
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }
-
-  addorderbtn.addEventListener("click", () => {
-    const orderData = {
-      oid: oid.value,
-      // Other order data fields...
-    };
-
-    set(ref(db, "orders/" + oid.value), orderData)
-      .then(() => {
-        alert("Data Added Successfully");
-        incrementOrderId(); // Increment order ID after successful addition
-        window.location.href = "orders.html";
-      })
-      .catch((error) => {
-        alert("Unsuccessful");
-        console.log(error);
-      });
-  });
-</script>
+    </script>
   </body>
 </html>

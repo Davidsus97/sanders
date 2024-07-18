@@ -13,12 +13,13 @@
     </header>
 
     <nav class="tabs">
-      <a href="index.html" class="tab">Home</a>
-      <a href="customer.html" class="tab">Customer</a>
-      <a href="#items" class="tab">Items</a>
-      <a href="orders.html" class="tab">Orders</a>
+      <ul>
+        <li><a href="#index" class="tab">Home</a></li>
+        <li><a href="customer.html" class="tab">Customer</a></li>
+        <li><a href="items.html" class="tab">Items</a></li>
+        <li><a href="orders.html" class="tab">Orders</a></li>
+      </ul>
     </nav>
-
     <section id="items">
       <div class="tab-content active">
         <h2>Items</h2>
@@ -96,7 +97,7 @@
         let td3 = document.createElement("td");
         let td4 = document.createElement("td");
 
-        td1.innerHTML = ++ iid;
+        td1.innerHTML = ++iid;
         td2.innerHTML = item;
         td3.innerHTML = price;
         td4.innerHTML = weight;
@@ -160,7 +161,7 @@
             let price = row.getElementsByTagName("td")[2];
             let weight = row.getElementsByTagName("td")[3];
 
-            if (iid &&item && price && weight) {
+            if (iid && item && price && weight) {
               let iidText = iid.textContent || iid.innerText;
               let itemText = item.textContent || item.innerText;
               let priceText = price.textContent || price.innerText;
