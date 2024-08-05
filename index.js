@@ -54,6 +54,7 @@ function register() {
         custom: 1,
         itid: 1,
         orid: 1,
+        iid: 1,
       };
 
       database_ref.child("users/" + user.uid).set(user_data);

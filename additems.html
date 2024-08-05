@@ -89,24 +89,24 @@
       const analytics = getAnalytics(app);
       const db = getDatabase();
 
-      let oid = document.getElementById("oid");
-      let customerSelect = document.getElementById("customerSelect");
-      let itemSelect = document.getElementById("itemSelect");
-      let quantityInp = document.getElementById("quantityInp");
-      let addorderbtn = document.getElementById("addorderbtn");
+      let iid = document.getElementById("iid");
+      let itemInp = document.getElementById("ItemInp");
+      let priceInp = document.getElementById("PriceInp");
+      let weightInp = document.getElementById("WeightInp");
+      let additembtn = document.getElementById("additembtn");
       let countVariable;
 
       window.onload = function () {
-        const dbRefOrid = ref(db, "orid"); // Reference for order ID
+        const dbRefIid = ref(db, "iid"); // Reference for item ID
 
-        get(dbRefOrid)
+        get(dbRefIid)
           .then((snapshot) => {
             if (snapshot.exists()) {
               countVariable = Number(snapshot.val());
-              oid.value = countVariable; // Set initial order ID value
+              iid.value = countVariable; // Set initial item ID value
             } else {
               countVariable = 1;
-              oid.value = 1;
+              iid.value = 1;
             }
           })
           .catch((error) => {
@@ -114,14 +114,9 @@
           });
       };
 
-      // Alternatively, set the value after a slight delay:
-      setTimeout(() => {
-        oid.value = countVariable; // Assuming countVariable is retrieved elsewhere
-      }, 100); // Adjust delay as needed (in milliseconds)
-
-      function incrementOrderId() {
+      function incrementItemId() {
         const updates = {};
-        updates["/orid"] = countVariable + 1; // Update "orid" reference
+        updates["/iid"] = countVariable + 1; // Update "iid" reference
 
         update(ref(db), updates)
           .then(() => {
@@ -132,16 +127,18 @@
           });
       }
 
-      addorderbtn.addEventListener("click", () => {
-        const orderData = {
-          oid: oid.value,
-          // Other order data fields...
+      additembtn.addEventListener("click", () => {
+        const itemData = {
+          iid: iid.value,
+          item: itemInp.value,
+          price: priceInp.value,
+          weight: weightInp.value,
         };
 
-        set(ref(db, "orders/" + oid.value), orderData)
+        set(ref(db, "items/" + iid.value), itemData)
           .then(() => {
             alert("Data Added Successfully");
-            incrementOrderId(); // Increment order ID after successful addition
+            incrementItemId(); // Increment item ID after successful addition
             window.location.href = "items.html";
           })
           .catch((error) => {
