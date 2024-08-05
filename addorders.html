@@ -30,7 +30,6 @@
           readonly
         />
         <br /><br />
-
         <label for="DateInp">Date</label>
         <input
           type="date"
@@ -40,7 +39,6 @@
           required
         />
         <br /><br />
-
         <label for="TimeInp">Time</label>
         <input
           type="time"
@@ -53,11 +51,9 @@
         <label for="customerSelect">Customer</label>
         <select id="customerSelect" required></select>
         <br /><br />
-
         <label for="itemSelect">Item</label>
         <select id="itemSelect" required></select>
         <br /><br />
-
         <label for="quantityInp">Quantity</label>
         <input
           type="number"
@@ -67,7 +63,6 @@
           required
         />
         <br /><br />
-
         <label for="totalInp">Total</label>
         <input
           type="number"
@@ -77,7 +72,7 @@
           readonly
         />
         <br /><br />
-        <button class="add-customer-button" id="addorderbtn">Add Order</button>
+        <button class="add-order-button" id="addorderbtn">Add Order</button>
       </div>
     </section>
     <footer>
@@ -89,9 +84,9 @@
       import {
         getDatabase,
         ref,
-        push, // Use push to generate unique order IDs
-        get,
         set,
+        get,
+        update,
         onValue,
       } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
@@ -200,6 +195,7 @@
             quantity: parseInt(quantityInp.value),
             total: parseFloat(totalInp.value),
           };
+
           set(ref(db, "orders/" + oid.value), orderData)
             .then(() => {
               alert("Data Added Successfully");
